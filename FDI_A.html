@@ -1,0 +1,83 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Test final</title>
+        <script src="js/jquery-1.12.1.min.js"></script>
+        <script src="js/store.min.js"></script>
+        <link href='https://fonts.googleapis.com/css?family=Amatic+SC:400,700' rel='stylesheet' type='text/css'>
+        <link href="css/styles.css" rel="stylesheet">
+        </head>
+    <body>
+        <div id="form">
+            <textarea id="texto"></textarea><br>
+            <div data-color="yellow" class="colors"><img src="img/sticky-yellow.png"></div>
+            <div data-color="orange" class="colors"><img src="img/sticky-orange.png"></div>
+            <div data-color="purple" class="colors"><img src="img/sticky-purple.png"></div>
+            <div data-color="green" class="colors"><img src="img/sticky-green.png"></div><br>
+            <div id="agregar">Add note</div>
+            
+            <div id="error">Please select note's color and write some text.</div>
+        </div>
+        
+        <div id="notas-container">
+            <!-- <div class="nota yellow">
+                <span class="delete" data-nota="nota1"></span>
+                <span class="inner">Just a sample note</span>
+            </div> -->
+        </div>
+        
+    </body>
+    <script>
+    
+        var texto = "";
+        var color = "";
+        var contador = 0;
+
+        function resetSelectedClass(){
+            $('.colors').removeClass('selected')
+        }
+
+        $('.colors').on('click', function(){
+            resetSelectedClass()
+            $(this).addClass('selected')
+            color = $(this).data('color')
+            console.log($(this).data('color'))
+        })
+
+        $('#texto').on('change paste keyup', function(){
+
+            texto = $(this).val()
+            if(texto === ""){
+                $('#error').show()
+            } else {
+                $('#error').hide()                
+            }
+
+        })
+
+        $('#agregar').on('click', function(){
+
+            texto = $('#texto').val()
+            
+            if(texto === "" || color === ""){
+                $('#error').show()
+            }else{
+
+                $('#notas-container').append(`
+                    <div class="nota ${color}">
+                        <span class="delete" data-nota="${contador++}"></span>
+                        <span class="inner">${texto}</span>
+                    </div>
+                `)
+
+                $('#texto').val("") 
+                resetSelectedClass()                    
+
+            }
+
+        })
+    
+    </script>
+</html>

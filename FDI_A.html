@@ -39,6 +39,7 @@
 
         function resetSelectedClass() {
             globalColor = ""
+            $('#texto').css("background-color", "#fafafa")
             $('.colors').removeClass('selected')
         }
 
@@ -67,7 +68,9 @@
         $('.colors').on('click', function(){
             resetSelectedClass()
             $(this).addClass('selected')
+
             globalColor = $(this).data('color')
+            $('#texto').css("background-color", globalColor)
         })
 
         function addDeleteClickListener(){

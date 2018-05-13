@@ -31,49 +31,70 @@
     </body>
     <script>
     
-        var texto = "";
-        var color = "";
-        var contador = 0;
+        var notes = store.get("notes")
+        var globalColor = ""
 
-        function resetSelectedClass(){
+        if(notes === undefined) notes = []
+        else printNotes()
+
+        function resetSelectedClass() {
+            globalColor = ""
             $('.colors').removeClass('selected')
+        }
+
+        function printNotes(){
+
+            $('#notas-container').empty()
+
+            for(index in notes){
+
+                var color = notes[index].color
+                var text = notes[index].text
+
+                $('#notas-container').append(`
+                <div class="nota ${color}">
+                    <span class="delete" data-nota="${index+1}"></span>
+                    <span class="inner">${text}</span>
+                </div>
+                `)
+
+            }
+
         }
 
         $('.colors').on('click', function(){
             resetSelectedClass()
             $(this).addClass('selected')
-            color = $(this).data('color')
-            console.log($(this).data('color'))
+            globalColor = $(this).data('color')
         })
 
         $('#texto').on('change paste keyup', function(){
 
             texto = $(this).val()
-            if(texto === ""){
-                $('#error').show()
-            } else {
-                $('#error').hide()                
-            }
+
+            if(texto === "") $('#error').show()
+            else $('#error').hide()                
 
         })
 
         $('#agregar').on('click', function(){
 
-            texto = $('#texto').val()
+            var texto = $('#texto').val()
             
-            if(texto === "" || color === ""){
-                $('#error').show()
-            }else{
+            if(texto === "" || globalColor === "") $('#error').show()
+            else {
 
-                $('#notas-container').append(`
-                    <div class="nota ${color}">
-                        <span class="delete" data-nota="${contador++}"></span>
-                        <span class="inner">${texto}</span>
-                    </div>
-                `)
+                notes.push({
+                    color:globalColor,
+                    text:texto
+                })
+
+                store.set('notes', notes)
 
                 $('#texto').val("") 
                 resetSelectedClass()                    
+
+                printNotes()
 
             }
 

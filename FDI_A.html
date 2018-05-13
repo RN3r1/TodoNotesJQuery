@@ -34,7 +34,7 @@
         var notes = store.get("notes")
         var globalColor = ""
 
-        if(notes === undefined) notes = []
+        if (notes === undefined) notes = []
         else printNotes()
 
         function resetSelectedClass() {
@@ -53,12 +53,14 @@
 
                 $('#notas-container').append(`
                 <div class="nota ${color}">
-                    <span class="delete" data-nota="${index+1}"></span>
+                    <span class="delete" data-index="${index}"></span>
                     <span class="inner">${text}</span>
                 </div>
                 `)
 
             }
+
+            addDeleteClickListener()
 
         }
 
@@ -67,6 +69,20 @@
             $(this).addClass('selected')
             globalColor = $(this).data('color')
         })
+
+        function addDeleteClickListener(){
+
+            $('.delete').on('click', function () {
+
+                console.log("Cick en Delete")
+                var index = $(this).data("index")
+                notes.splice(index, 1)
+                store.set('notes', notes)
+                printNotes()
+
+            })
+
+        }
 
         $('#texto').on('change paste keyup', function(){
 
@@ -83,6 +99,8 @@
             
             if(texto === "" || globalColor === "") $('#error').show()
             else {
+
+                $('#error').hide()
 
                 notes.push({
                     color:globalColor,
